@@ -11,19 +11,25 @@
 
     <!-- BulgarianTvGuide references -->
     <link href="/css/default.css" rel="stylesheet" />
-
-    <script src="js/datalayer.js"></script>
     <script src="js/models.js"></script>
+    <script src="js/datalayer.js"></script>
     <script src="js/viewmodels.js"></script>
-    <script src="js/defaultcodebehind.js"></script>
-
     <script src="/js/default.js"></script>
     <script src="/js/navigator.js"></script>
+    <script src="js/defaultcodebehind.js"></script>
 </head>
 <body>
     <div id="contenthost" data-win-control="Application.PageControlNavigator" data-win-options="{home: '/pages/home/home.html'}"></div>
-    <!-- <div id="appbar" data-win-control="WinJS.UI.AppBar">
-        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'cmd', label:'Command', icon:'placeholder'}" type="button"></button>
-    </div> -->
+    <div id="appbar" data-win-control="WinJS.UI.AppBar">
+        <button data-win-control="WinJS.UI.AppBarCommand"
+            data-win-options="{
+            label:'Add Computer', icon:'add', 
+            onclick: DefaultCodeBehind.goToAddComputer
+            }"
+            type="button">
+        </button>
+        <button data-win-control="WinJS.UI.AppBarCommand" data-win-options="{id:'cmdSelectAll',label:'Select All',icon:'selectall',section:'selection',extraClass:'multiSelect',tooltip:'Select All'}"></button>
+
+    </div>
 </body>
 </html>

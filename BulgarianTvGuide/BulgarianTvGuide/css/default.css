@@ -6,7 +6,7 @@
 .fragment {
     /* Define a grid with rows for a banner and a body */
     -ms-grid-columns: 1fr;
-    -ms-grid-rows: 128px 1fr;
+    -ms-grid-rows: 120px 1fr;
     display: -ms-grid;
     height: 100%;
     width: 100%;
@@ -71,4 +71,11 @@
     .fragment header[role=banner] {
         -ms-grid-columns: 29px 71px 1fr;
     }
+}
+
+#programsListView {
+	width: 94.06%;
+	height: 97.69%;
+	left: 0px;
+	top: 15px;
 }
