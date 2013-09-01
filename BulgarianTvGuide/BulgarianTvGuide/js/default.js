@@ -19,6 +19,8 @@
                 // Restore application state here.
             }
 
+            var asd = Data.initPrograms();
+
             if (app.sessionState.history) {
                 nav.history = app.sessionState.history;
             }
