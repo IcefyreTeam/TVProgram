@@ -23,11 +23,8 @@
         var asd = [];
         var asdd = initTvsAndDays().then(function (all) {
             asd = all; // etooooooooooooooooooooooooooo tova sa ti dannite za parse-vane !!!!!!!!!!!! - all
-
-            var x = 5;
-        }).then(function () {
             ViewModels.loadComputers(asd);
-            var p = 42;
+            var x = 5;
         });
     }
 
