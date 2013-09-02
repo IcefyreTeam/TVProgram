@@ -64,11 +64,14 @@
     <Content Include="js\models.js" />
     <Content Include="js\navigator.js" />
     <Content Include="js\viewmodels.js" />
+    <Content Include="default.html" />
     <Content Include="pages\home\home.css" />
     <Content Include="pages\home\home.html" />
     <Content Include="pages\home\home.js" />
-    <Content Include="default.html" />
     <Content Include="pages\home\homecodebehind.js" />
+    <Content Include="pages\programDetails\programDetails.css" />
+    <Content Include="pages\programDetails\programDetails.html" />
+    <Content Include="pages\programDetails\programDetails.js" />
     <None Include="BulgarianTvGuide_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
