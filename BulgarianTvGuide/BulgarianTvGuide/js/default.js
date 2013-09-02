@@ -18,8 +18,8 @@
                 // TODO: This application has been reactivated from suspension.
                 // Restore application state here.
             }
-            WinJS.Application.local.remove("FirstDay.txt");
-            var asd = Data.initData();
+
+            Data.initData();
 
             if (app.sessionState.history) {
                 nav.history = app.sessionState.history;

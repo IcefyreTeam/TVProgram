@@ -27,6 +27,11 @@
         this.date = Date.parse(date);
     })
 
+    var ProgramUpdateModel = WinJS.Class.define(function (id,  lastUpdateDate) {
+        this.id = id;
+        this.lastUpdateDate = Date.parse(lastUpdateDate);
+    })
+
     var ScheduleModel = WinJS.Class.define(function (name, date,listShows) {
         this.name = name;
         this.listShows = listShows;
@@ -60,6 +65,7 @@
         Schedule: ScheduleModel,
         Show: ShowModel,
         Day: DayModel,
+        ProgramUpdate: ProgramUpdateModel
         //ComputerModel: ComputerModel
 
     })

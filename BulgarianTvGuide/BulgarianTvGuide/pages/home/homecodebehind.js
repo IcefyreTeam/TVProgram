@@ -1,12 +1,12 @@
 ﻿(function () {
 
-    var goToComputerDetailsPage = function (invokeEvent) {
-        WinJS.Navigation.navigate("/pages/programDetails/programDetails.html", {
-            indexInComputersList: invokeEvent.detail.itemIndex
-        });
-    }
+    //var goToComputerDetailsPage = function (invokeEvent) {
+    //    WinJS.Navigation.navigate("/pages/programDetails/programDetails.html", {
+    //        indexInComputersList: invokeEvent.detail.itemIndex
+    //    });
+    //}
 
-    WinJS.Utilities.markSupportedForProcessing(goToComputerDetailsPage);
+    //WinJS.Utilities.markSupportedForProcessing(goToComputerDetailsPage);
 
     WinJS.Namespace.define("HomeCodeBehind", {
         callLoadPrograms: function () {
@@ -34,6 +34,6 @@
 
     //        });
     //    }
-       goToComputerDetailsPage: goToComputerDetailsPage
+       //goToComputerDetailsPage: goToComputerDetailsPage
     })
 })();

@@ -4,107 +4,153 @@
 (function () {
     var tvs = [];
     var days = [];
+    var showsToday = [];
+
+    var localSettings = Windows.Storage.ApplicationData.current.localSettings;
+
+    getTvs = function () {
+        return tvs;
+    }
 
     var setTvs = function (tv) {
-        tvs = [];
         tvs = tv;
     }
-    var setDays = function (day) {
-        days = [];
+    var addShow = function (day) {
         days = day;
     }
+    var addShowsToday = function (show) {
+        showsToday.push(show);
+    }
+
+    var getOneDay = function (tv, day) {
+        return initOrDownload({ cmd: "" + tv + "-" + day });
+    }
+
 
     var initData = function () {
-        var localSettings = Windows.Storage.ApplicationData.current.localSettings;
-
         if (!localSettings.values["firstInit"]) {
             localSettings.values["firstInit"] = true;
         }
-        var asd = [];
-        var asdd = initTvsAndDays().then(function (all) {
-            asd = all; // etooooooooooooooooooooooooooo tova sa ti dannite za parse-vane !!!!!!!!!!!! - all
-            ViewModels.loadComputers(asd);
-            var x = 5;
-        });
+        if (!localSettings.values["tvState"]) {
+            localSettings.values["tvState"] = 0;
+        }
+        if (!localSettings.values["downloadState"]) {
+            localSettings.values["downloadState"] = -1;
+        }
+
+        initTvsAndDays();
     }
 
     var initTvsAndDays = function () {
-        var self = this;
         return new WinJS.Promise(function (complete) {
-            tvOpenOrDownload()
+            tvOpenOrDownload()                              //dl or load     TVS
             .then(function (data) {
-                //daysOpenOrDownload();
-
                 setTimeout(function () {
                     //var tvs = data;
-                    daysOpenOrDownload().then(function (days) {
-                        //WinJS.Application.local.remove("FirstDay.txt");      /// must be remove after 
-                        setTimeout(function () {
-                            //var asda2s = days;
-
-                            //var daysss2 = days;
-                            //var daysss2 = days.days;
-                            var asdd = tvs;
-                            WinJS.Application.local.remove("FirstDay.txt");
-                            showsFirstDay(days).then(function (all) {
-                                complete(all);
-                                //setTimeout(function () {
-                                //    new WinJS.Promise(function (complete) {
-
-                                //        var asdasd = 5353;
-                                //        var asdas = all;
-                                //        var iojkoet = 53;
-                                //    })
-                                //    var asd = all;
-                                //    var asd = 989;
-                                //    //complete(all);
-                                //}, 200)
-                            });
-                            //complete(all);
-                        }, 200);
+                    ViewModels.loadMainContent(getTvs());
+                    daysOpenOrDownload()                    //dl or load     DAYS
+                        .then(function () {
+                            setTimeout(function () {
+                                getOneDay(2, 6);                                                           /// proba getOneDAYYYYYYYYYYYYYY
 
 
-                        var x = 34535;
-                        //return {tvs, day}
-
-                    })
-
-                    //return ;
-
-
-                    var dasfsd = 35;
-
-                    //    if (localSettings.values["firstInit"] == true) {
-                    //        new WinJS.Promise(function (complete) {
+                                if (localSettings.values["firstInit"] == true) {        //ifFirstStart
+                                    localSettings.values["downloadState"] = 0;
+                                    initInitiolDayleShows().then(function () {                          //-> add tv.day[DateTimeNow].shows
+                                        setTimeout(function () {
+                                            updateAllToLastDay();
+                                            var x = 4;
+                                        }, 200);
+                                    })
+                                }
+                            }, 200);
+                        })
                 }, 100);
             });
-            ////////.then(function (days) {
-            ////////    //WinJS.Application.local.remove("FirstDay.txt");      /// must be remove after 
-            ////////    var asda2s = days;
-            ////////    setTimeout(function () {
-            ////////        var daysss = ddd;
-            ////////        var daysss2 = days;
-            ////////        var daysss2 = days.days;
-            ////////        var asdd = tvs;
-            ////////        showsFirstDay(tvs, days);
-            ////////        complete(all);
-            ////////    }, 21000);
-
-            ////////    var dasfsd = 35;
-
-            ////////    //    if (localSettings.values["firstInit"] == true) {
-            ////////    //        new WinJS.Promise(function (complete) {
-            ////////})
-            //.then(function (data) {
-            //    var asd = data.all;
-            //    //var as2d = data.tvs;
-            //    complete(asd);
-            //})
-
-            //)
-            //complete(asd);
         });
     }
+
+    var updateAllToLastDay = function () {
+
+        var updateDays = [];
+        //getTvs().forEach(function (day) {
+        //    updateDay.push(new Models.ProgramUpdate(day.id,day.lastUpdate));
+        //})
+
+        //localSettings.values["downloadState"] = -1;
+        //localSettings.values["tvState"] = 0;
+
+
+        updateDays.push(new Models.ProgramUpdate(getTvs()[0].id, getTvs()[0].lastUpdate));
+        updateDays.push(new Models.ProgramUpdate(getTvs()[1].id, getTvs()[1].lastUpdate));
+        return new WinJS.Promise(function (complete, error) {
+            UpdateForAllDays(updateDays).then(function (tempTvs) {
+                var localFolder = Windows.Storage.ApplicationData.current.localFolder;
+                setTvs(tempTvs);
+                return localFolder.createFileAsync(
+                                "TvNames.txt",
+                                Windows.Storage.CreationCollisionOption.replaceExisting)
+                            .then(function (file) {
+                                saveToFile(file, JSON.stringify(tempTvs))
+                            });
+
+            });
+        });
+    }
+
+    var UpdateForAllDays = function (updateDays) {
+        var localFolder = Windows.Storage.ApplicationData.current.localFolder;
+        var tempTvs = getTvs();
+        return new WinJS.Promise(function (complete) {
+            new WinJS.Promise(function (downloadedResponseText) {
+                downloadPost("http://bulgariantvprograms.apphb.com/api/data/PostProgramSchedule", updateDays).then(function (responseText) {
+                    downloadedResponseText(responseText);
+                });
+            }).then(function (responseText) {
+                var json = JSON.parse(responseText);
+                var filename = "";
+
+                json.forEach(function (shows) {
+                    //for (var i = 0; i < json.length; i++) {
+                    new WinJS.Promise(function (complete) {
+                        var showListPush = new Array();
+                        for (var showIndex = 0; showIndex < shows.show.length ; showIndex++) {        //parsvane v modela za 1 den
+                            showListPush.push(new Models.Show(shows.show[showIndex].name,
+                               shows.show[showIndex].startAt));
+                            var asd = 523532532;
+                        }
+                        if (tempTvs[shows.programId].lastUpdate < shows.dataId) {
+                            tempTvs[shows.programId].lastUpdate = shows.dataId;
+                        }
+                        for (var i = 0; i < showListPush.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
+                            showListPush[i].setDuration(showListPush[i + 1].startAt);
+                        }
+
+                        complete(showListPush);
+                    }).then(
+                        function (showListPush) {
+                            //filename = "" + json[i].programId + "-" + json[i].dataId;
+                            return localFolder.createFileAsync(
+                                "" + shows.programId + "-" + shows.dataId + ".txt",
+                                Windows.Storage.CreationCollisionOption.openIfExists)
+                            .then(function (file) {
+                                saveToFile(file, JSON.stringify(showListPush))
+                            });
+                        })
+                    //.then(function (filePromise) {
+
+                    //    //saveToFile("" + tv.id + "-" + tv.schedules[0].dataId + ".txt", JSON.stringify(showListPush))
+
+                    //})
+                })
+                //forEach end
+                //completex();
+            }
+            );
+
+        })
+    }
+
 
     var tvOpenOrDownload = function () {
         return new WinJS.Promise(function (complete) {
@@ -122,22 +168,43 @@
 
         })
     }
-    var showsFirstDay = function (days) {
+    var initInitiolDayleShows = function (days) {
         return initOrDownload({ cmd: "FirstDay", day: days });
     }
-
     var initOrDownload = function (cmd) {
         return new WinJS.Promise(function (complete, error) {
-            if (cmd.cmd == "FirstDay") {
-                dlTvNamesAndParseToLocal(cmd.cmd)
-            }
             dlTvNamesAndParseToLocal(cmd.cmd)
                     .then(function (json) {
-                        if (cmd.cmd == "TvNames") {
+                        if (cmd.cmd == "2-6") {
+                            var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
+                            json.show.forEach(function (show) {
+                                showListPush.push(new Models.Show(show.name,
+                                   show.startAt));
+                            })
+                            for (var i = 0; i < showListPush.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
+                                showListPush[i].setDuration(showListPush[i + 1].startAt);
+                            }
+
+                            //addShowsToday(new Models.Schedule(                            
+                            //    tvs[tv.id - 1].programName,
+                            //    days[tv.schedules[0].dataId - 1].name,
+                            //    showListPush));
+
+                            for (var showIndex = 0; showIndex < tv.schedules[0].show.length ; showIndex++) {        //parsvane v modela za 1 den
+
+                                var asd = 523532532;
+                            }
+                            json.forEach(function (day) {
+                                days.push(new Models.Day(day.id, day.name, day.date));
+                            });
+
+                            complete();
+                        }
+                        else if (cmd.cmd == "TvNames") {
                             var tvs = [];
-                            var jsonResponse = JSON.parse(json);
-                            for (var i = 0, len = jsonResponse.length; i < len; i++) {
-                                tvs.push(new Models.Program(jsonResponse[i].id, jsonResponse[i].name, jsonResponse[i].lastUpdate));
+                            //var jsonResponse = JSON.parse(json);
+                            for (var i = 0, len = json.length; i < len; i++) {
+                                tvs.push(new Models.Program(json[i].id, json[i].name, json[i].lastUpdate));
                             }
                             //json.forEach(function (prog) {
                             //    tvs.push(new Models.Program(prog.id, prog.name, prog.lastUpdate));
@@ -147,112 +214,77 @@
                         }
                         else if (cmd.cmd == "Days") {
                             var days = [];
-                            var tvs = cmd.tvs;
+                            //var tvs = cmd.tvs;            //moje i da se naloji da se vyrne :?
                             json.forEach(function (day) {
                                 days.push(new Models.Day(day.id, day.name, day.date));
                             });
-                            setDays(days);
+                            addShow(days);
                             complete(days);
                         }
                         else if (cmd.cmd == "FirstDay") {
-                        //    setTimeout(function () {
-                        //        //var showListPush = new Array();
-                        //        //var filename = "";
-                        //        //var all = new Array();
-
-                        //        //for (var tv = 0; tv < json.length ; tv++) {
-                        //        //    for (var day = 0; day < json[tv].schedules.length ; day++) {
-                        //        //        showListPush = new Array();
-                        //        //        for (var showIndex = 0; showIndex < json[tv].schedules[day].show.length ; showIndex++) {
-                        //        //            showListPush.push(new Models.Show(json[tv].schedules[day].show[showIndex].name,
-                        //        //               json[tv].schedules[day].show[showIndex].startAt));
-                        //        //            var asd = 523532532;
-                        //        //        }
-                        //        //        //var asd = cmd.tv._value[json[tv].id - 1].programName;
-                        //        //        //var d = cmd.day._value[json[tv].schedules[day].dataId - 1].name;
-                        //        //        //showListPush.fixDuration();
-                        //        //        for (var i = 0; i < showListPush.length - 1; i++) {
-                        //        //            showListPush[i].setDuration(showListPush[i + 1].startAt);
-                        //        //        }
-
-
-
-
-                        //        //        //newSchedule.fixDuration();
-                        //        //        all.push(new Models.Schedule(
-                        //        //            cmd.tv._value[json[tv].id - 1].programName,
-                        //        //            cmd.day[json[tv].schedules[day].dataId - 1].name,
-                        //        //            showListPush
-                        //        //            ));
-
-                        //        //        var askjfdkasf = 3535;
-                        //        //    }
-                            //        //}
-                            var xsd = 5353;
-                            complete(json);
-                        //    }, 1000)
+                            //setTimeout(function myfunction() {
+                            //    complete(json);
+                            //}, 500
+                            //)
+                            complete();
                         }
                     });
         });
     }
     var dlTvNamesAndParseToLocal = function (fileName) {
         var localFolder = Windows.Storage.ApplicationData.current.localFolder;
-        return new WinJS.Promise(function (complete) {
+        return new WinJS.Promise(function (completex) {
             if (fileName == "FirstDay") { // ili update
                 new WinJS.Promise(function (downloadedResponseText) {
                     download("http://bulgariantvprograms.apphb.com/api/Data/InitPrograms").then(function (responseText) {
                         var qweqw = 1;
+                        //setTimeout(
                         downloadedResponseText(responseText);
+                        //, 200)
                     });
                 }).then(function (responseText) {
                     var json = JSON.parse(responseText);
-
-                    var showListPush = new Array();
                     var filename = "";
-                    var all = new Array();
-
-
-                    for (var tv = 0; tv < json.length ; tv++) {
-                        for (var day = 0; day < json[tv].schedules.length ; day++) {
-                            showListPush = new Array();
-                            for (var showIndex = 0; showIndex < json[tv].schedules[day].show.length ; showIndex++) {
-                                showListPush.push(new Models.Show(json[tv].schedules[day].show[showIndex].name,
-                                   json[tv].schedules[day].show[showIndex].startAt));
+                    //var all = new Array();
+                    //for (var tv = 0; tv < json.length ; tv++) {   //for
+                    json.forEach(function (tv) {
+                        new WinJS.Promise(function (complete) {
+                            var showListPush = new Array();
+                            for (var showIndex = 0; showIndex < tv.schedules[0].show.length ; showIndex++) {        //parsvane v modela za 1 den
+                                showListPush.push(new Models.Show(tv.schedules[0].show[showIndex].name,
+                                   tv.schedules[0].show[showIndex].startAt));
                                 var asd = 523532532;
                             }
-                            //var asd = cmd.tv._value[json[tv].id - 1].programName;
-                            //var d = cmd.day._value[json[tv].schedules[day].dataId - 1].name;
-                            //showListPush.fixDuration();
-                            for (var i = 0; i < showListPush.length - 1; i++) {
+                            for (var i = 0; i < showListPush.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
                                 showListPush[i].setDuration(showListPush[i + 1].startAt);
                             }
-                            filename = "" + json[tv].id + "-" + json[tv].schedules[day].dataId;
-                            localFolder.createFileAsync(filename + ".txt", Windows.Storage.CreationCollisionOption.failIfExists).then(
-                                function (file) {
-                                    saveToFile(file, responseText);
+
+                            addShowsToday(new Models.Schedule(
+                                tvs[tv.id - 1].programName,
+                                days[tv.schedules[0].dataId - 1].name,
+                                showListPush));
+
+
+                            complete(showListPush);
+                        }).then(
+                            function (showListPush) {
+                                //filename = "" + tv.id + "-" + tv.schedules[0].dataId;
+                                return localFolder.createFileAsync("" + tv.id + "-" + tv.schedules[0].dataId + ".txt",
+                                    Windows.Storage.CreationCollisionOption.openIfExists)
+                                .then(function (file) {
+                                    saveToFile(file, JSON.stringify(showListPush))
                                 });
+                            })
+                        //.then(function (filePromise) {
 
+                        //    //saveToFile("" + tv.id + "-" + tv.schedules[0].dataId + ".txt", JSON.stringify(showListPush))
 
-
-                            //newSchedule.fixDuration();
-                            all.push(new Models.Schedule(
-                                tvs[json[tv].id - 1].programName,
-                                days[json[tv].schedules[day].dataId - 1].name,
-                                showListPush
-                                ));
-
-                            //var askjfdkasf = 3535;
-                        }
-                    }
-
-                    complete(all);
+                        //})
+                    })
+                    completex();
                 })
-
-
             }
             else {
-
-
                 localFolder.createFileAsync(fileName + ".txt", Windows.Storage.CreationCollisionOption.failIfExists).then(
                     function (file) {
                         new WinJS.Promise(function (downloadedResponseText) {
@@ -268,30 +300,26 @@
                                     downloadedResponseText(responseText);
                                 });
                             }
-
                         }).then(
                             function (responseText) {
-
-
                                 saveToFile(file, responseText);
                                 var programs = JSON.parse(responseText);
-                                var x = 8;
-                                complete(programs);
+                                completex(programs);
                             },
                             function (messager) {
                                 error(messager);
                             }
                         )
-                    },
+                    }
+                    ,
                     function () {
                         WinJS.Application.local.readText(fileName + ".txt", "failed to open file").then(
                             function (content) {
-                                //setImmediate(function () {
-                                var programs = JSON.parse(content);//JSON.parse();
+                                //setImmediate(function () {                //non used for now
+                                var programs = JSON.parse(content);
                                 var asd = 35;
-                                complete(programs);
+                                completex(programs);
                                 //});
-
                             });
                     });
             }
@@ -301,8 +329,8 @@
     var saveToFile = function (file, responseText) {
         file.openTransactedWriteAsync().then(function (transaction) {
             var writer = Windows.Storage.Streams.DataWriter(transaction.stream);
-            writer.writeString(responseText.toString());
-            //JSON.stringify(responseText));
+            writer.writeString(responseText);
+
             var n = 321432;
             writer.storeAsync().done(function () {
                 var asdasd = 5;
@@ -312,7 +340,9 @@
                 });
             });
 
-        },
+
+        }
+        ,
                             function (message) {
                                 WinJS.Application.local.remove(fileName + ".txt");
                             });
@@ -323,6 +353,24 @@
                     url: download,
                     //type: "GET",
                     responseType: "json"
+                }).then(
+               function (response) {
+                   return response.responseText;
+               },
+               function (error) {
+                   console.log(error.toString());
+               }
+           );
+    }
+
+
+    var downloadPost = function (download, json) {
+        return WinJS.xhr(
+                {
+                    type: "post",
+                    url: download,
+                    headers: { "Content-type": "application/json" },
+                    data: JSON.stringify(json)
                 }).then(
                function (response) {
                    return response.responseText;
@@ -458,6 +506,7 @@
     WinJS.Namespace.define("Data", {
         //getComputers: getComputers,
         //addComputer: addComputer,
+        tvs: getTvs,
         initData: initData
     });
 })()
