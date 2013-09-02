@@ -21,25 +21,37 @@
         this.lastUpdateDate = Date.parse(lastUpdateDate);
     })
 
-    var ScheduleModel = WinJS.Class.define(function (name, listShows) {
+    var DayModel = WinJS.Class.define(function (id, name, date) {
+        this.id = id;
+        this.name = name;
+        this.date = Date.parse(date);
+    })
+
+    var ScheduleModel = WinJS.Class.define(function (name, date,listShows) {
         this.name = name;
         this.listShows = listShows;
-        for (var i = 0; i < listShows.lenght - 1; i++) {
-            listShows[i].setDuration(listShows[i + 1]);
+        this.date = date;
+    },
+    {
+        fixDuration: function () {
+            var self = this;
+            for (var i = 0; i < self.listShows.len - 1; i++) {
+                self.listShows[i].setDuration(self.listShows[i + 1].startAt);
+            }
         }
     })
 
     var ShowModel = WinJS.Class.define(function (showName, startingTime) {
         this.name = showName;
-        this.startTime = startingTime;
-        this.duration = 90//TODO for last user in next Update
+        this.startAt = startingTime;
+        this.dur = 90;//TODO for last user in next Update
     },
     {
         setDuration: function (nextShowStart) {
-            var start = this.startTime.split(':');
+            var start = this.startAt.split(':');
             var end = nextShowStart.split(':');
-            this.duration =
-                (int.parse(end[0]) - int.parse(start[0])) * 60 + int.parse(end[1]) - int.parse(start[1])
+            this.dur =
+                (parseInt(end[0]) - parseInt(start[0])) * 60 + parseInt(end[1]) - parseInt(start[1])
         }
     })
 
@@ -47,6 +59,7 @@
         Program: ProgramModel,
         Schedule: ScheduleModel,
         Show: ShowModel,
+        Day: DayModel,
         //ComputerModel: ComputerModel
 
     })
