@@ -21,10 +21,13 @@
             localSettings.values["firstInit"] = true;
         }
         var asd = [];
-        var asd = initTvsAndDays().then(function (all) {
+        var asdd = initTvsAndDays().then(function (all) {
             asd = all; // etooooooooooooooooooooooooooo tova sa ti dannite za parse-vane !!!!!!!!!!!! - all
 
             var x = 5;
+        }).then(function () {
+            ViewModels.loadComputers(asd);
+            var p = 42;
         });
     }
 
@@ -135,9 +138,13 @@
                     .then(function (json) {
                         if (cmd.cmd == "TvNames") {
                             var tvs = [];
-                            json.forEach(function (prog) {
-                                tvs.push(new Models.Program(prog.id, prog.name, prog.lastUpdate));
-                            });
+                            var jsonResponse = JSON.parse(json);
+                            for (var i = 0, len = jsonResponse.length; i < len; i++) {
+                                tvs.push(new Models.Program(jsonResponse[i].id, jsonResponse[i].name, jsonResponse[i].lastUpdate));
+                            }
+                            //json.forEach(function (prog) {
+                            //    tvs.push(new Models.Program(prog.id, prog.name, prog.lastUpdate));
+                            //});
                             setTvs(tvs);
                             complete(tvs);
                         }
