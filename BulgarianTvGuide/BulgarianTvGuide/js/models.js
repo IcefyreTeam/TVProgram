@@ -19,6 +19,7 @@
         this.id = id;
         this.programName = programName;
         this.lastUpdateDate = Date.parse(lastUpdateDate);
+        this.logo = "images/" + this.id + ".png";
     })
 
     var DayModel = WinJS.Class.define(function (id, name, date) {

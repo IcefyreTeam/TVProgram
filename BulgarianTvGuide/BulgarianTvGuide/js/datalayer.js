@@ -45,17 +45,18 @@
             }
         }
 
-        var checkDay = day;
+        //var checkDay = day ;
         for (var i = day; i < dayTo + 1; i++) {
-            initOrDownload({ cmd: "" + tv + "-" + checkDay, day: checkDay }).then(function (returnDay) {
-                checkDay = returnDay;
-            })
+            initOrDownload({ cmd: "" + tv + "-" + i, day: i })
+            //    .then(function (returnDay) {
+            //    checkDay = returnDay;
+            //})
         }
 
         new WinJS.Promise(function () {
             var updateDays = [];
             //var asdas = new Date(localSettings.values["" + tv]);
-            updateDays.push(new Models.ProgramUpdate(getTvs()[tv-1].id , 4))// new Date(localSettings.values["" + tv-1]) ));
+            updateDays.push(new Models.ProgramUpdate(tv, dayTo));//new Date(localSettings.values["" + tv-1]) )); //4));//
             new WinJS.Promise(function (downloadedResponseText) {
                 downloadPost("http://bulgariantvprograms.apphb.com/api/data/PostProgramSchedule", updateDays).then(function (responseText) {
                     downloadedResponseText(responseText);
@@ -85,7 +86,7 @@
                             var thisDayId;
                             var d = getDays();
                             for (var i = 0; i < d.length; i++) {
-                                if (d[i].id == shows.dataId) { //dataId) {//
+                                if (d[i].id == dataId) {//shows.dataId - 1) { //dataId) {//
                                     thisDay = d[i].name;
                                     thisDayId = d[i].id;
                                     //break;x
@@ -299,7 +300,6 @@
                         }
                         else if (cmd.cmd == "Days") {
                             var days = [];
-                            //var tvs = cmd.tvs;            //moje i da se naloji da se vyrne :?
                             json.forEach(function (day) {
                                 days.push(new Models.Day(day.id, day.name, day.date));
                             });
@@ -307,23 +307,15 @@
                             complete(days);
                         }
                         else if (cmd.cmd == "FirstDay") {
-                            //setTimeout(function myfunction() {
-                            //    complete(json);
-                            //}, 500
-                            //)
                             complete();
                         }
                         else {
                             var thisDay;
-                            //while (days == null) {
-                            //    setTimeout(function () { }, 100   )
-                            //}
                             var d = getDays();
                             for (var i = 0; i < d.length; i++) {
                                 if (d[i].id == cmd.day) {
                                     thisDay = d[i].name;
                                     thisDayId = d[i].id;
-                                    //break;
                                 }
                             }
                             var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
@@ -364,7 +356,6 @@
                             for (var showIndex = 0; showIndex < tv.schedules[0].show.length ; showIndex++) {        //parsvane v modela za 1 den
                                 showListPush.push(new Models.Show(tv.schedules[0].show[showIndex].name,
                                    tv.schedules[0].show[showIndex].startAt));
-                                var asd = 523532532;
                             }
                             for (var i = 0; i < showListPush.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
                                 showListPush[i].setDuration(showListPush[i + 1].startAt);
@@ -372,7 +363,7 @@
 
                             if (localSettings.values["tvState"] == tv.id) {
                                 var thisDayId = getCurrentDayId();
-                                var thisDay = getDays()[thisDayId].name;
+                                var thisDay = getDays()[thisDayId - 1].name;
                                 //for (var i = 0; i < d.length; i++) {
                                 //    if (d[i].id == currentdayId) { //dataId) {//
                                 //        thisDay = d[i].name;
