@@ -8,20 +8,21 @@
         // populates the page elements with the app's data.
         ready: function (element, options) {
             // TODO: Initialize the page here.
-            //WinJS.Binding.processAll(element,
-            //   ViewModels.computers.getAt(options.indexInComputersList));
-            //var showList = ViewModels.showList(options.indexInComputersList);
-            //var container = document.getElementById("ShowsListView");
-            //var shows = new WinJS.UI.ListView(container, {
-            //    itemTemplate: document.getElementById("short-computer-template"),
-            //    itemDataSource: showList.dataSource,
-            //    layout: { type: WinJS.UI.GridLayout },
-            //    scrollPosition: 0
-            //});
+            WinJS.Binding.processAll(element,
+               ViewModels.computers.getAt(options.indexInComputersList));
+            var showList = ViewModels.showList;
+            var container = document.getElementById("ShowsListView");
+            var shows = new WinJS.UI.ListView(container, {
+                itemTemplate: document.getElementById("short-computer-template"),
+                itemDataSource: showList.dataSource,
+                layout: { type: WinJS.UI.GridLayout },
+                scrollPosition: 0
+            });
         },
 
         unload: function () {
             // TODO: Respond to navigations away from this page.
+            ViewModels.unloadShowList();
         },
 
         updateLayout: function (element, viewState, lastViewState) {

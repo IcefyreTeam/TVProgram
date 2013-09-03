@@ -22,12 +22,13 @@
         showsToday.push(show);
     }
 
-    var getOneDay = function (tv, day) {
+    var getOneDay = function (tv, currentDay) {
+        var day = getCurrentDayId(currentDay);
         return initOrDownload({ cmd: "" + tv + "-" + day });
     }
 
 
-    var initData = function () {
+    var initData = function (currentProgram, currentDay) {
         if (!localSettings.values["firstInit"]) {
             localSettings.values["firstInit"] = true;
         }
@@ -37,11 +38,20 @@
         if (!localSettings.values["downloadState"]) {
             localSettings.values["downloadState"] = -1;
         }
-
-        initTvsAndDays();
+        initTvsAndDays(currentProgram, currentDay);
     }
-
-    var initTvsAndDays = function () {
+    
+    var getCurrentDayId = function (currentDay) {
+        var id = 0;
+        for (var i = 0, len = days.length; i < len; i++) {
+            if (days[i].date == Date.parse(currentDay)) {
+                id = days[i].id;
+                break;
+            }
+        }
+        return id;
+    }
+    var initTvsAndDays = function (currentProgram, currentDay) {
         return new WinJS.Promise(function (complete) {
             tvOpenOrDownload()                              //dl or load     TVS
             .then(function (data) {
@@ -51,7 +61,8 @@
                     daysOpenOrDownload()                    //dl or load     DAYS
                         .then(function () {
                             setTimeout(function () {
-                                getOneDay(2, 6);                                                           /// proba getOneDAYYYYYYYYYYYYYY
+                                
+                                getOneDay(currentProgram, currentDay);                                                           /// proba getOneDAYYYYYYYYYYYYYY
 
 
                                 if (localSettings.values["firstInit"] == true) {        //ifFirstStart
@@ -175,32 +186,8 @@
         return new WinJS.Promise(function (complete, error) {
             dlTvNamesAndParseToLocal(cmd.cmd)
                     .then(function (json) {
-                        if (cmd.cmd == "2-6") {
-                            var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
-                            json.show.forEach(function (show) {
-                                showListPush.push(new Models.Show(show.name,
-                                   show.startAt));
-                            })
-                            for (var i = 0; i < showListPush.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
-                                showListPush[i].setDuration(showListPush[i + 1].startAt);
-                            }
 
-                            //addShowsToday(new Models.Schedule(                            
-                            //    tvs[tv.id - 1].programName,
-                            //    days[tv.schedules[0].dataId - 1].name,
-                            //    showListPush));
-
-                            for (var showIndex = 0; showIndex < tv.schedules[0].show.length ; showIndex++) {        //parsvane v modela za 1 den
-
-                                var asd = 523532532;
-                            }
-                            json.forEach(function (day) {
-                                days.push(new Models.Day(day.id, day.name, day.date));
-                            });
-
-                            complete();
-                        }
-                        else if (cmd.cmd == "TvNames") {
+                        if (cmd.cmd == "TvNames") {
                             var tvs = [];
                             //var jsonResponse = JSON.parse(json);
                             for (var i = 0, len = json.length; i < len; i++) {
@@ -226,6 +213,31 @@
                             //    complete(json);
                             //}, 500
                             //)
+                            complete();
+                        } else {
+                            var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
+                            json.forEach(function (show) {
+                                tempShows.push(new Models.Show(show.name,
+                                   show.startAt));
+                            })
+                            for (var i = 0; i < tempShows.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
+                                tempShows[i].setDuration(tempShows[i + 1].startAt);
+                            }
+                            
+                            ViewModels.loadShowList(tempShows);
+                            //addShowsToday(new Models.Schedule(                            
+                            //    tvs[tv.id - 1].programName,
+                            //    days[tv.schedules[0].dataId - 1].name,
+                            //    showListPush));
+
+                            //for (var showIndex = 0; showIndex < tv.schedules[0].show.length ; showIndex++) {        //parsvane v modela za 1 den
+
+                            //    var asd = 523532532;
+                            //}
+                            //json.forEach(function (day) {
+                            //    days.push(new Models.Day(day.id, day.name, day.date));
+                            //});
+
                             complete();
                         }
                     });
