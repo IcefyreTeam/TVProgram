@@ -21,8 +21,13 @@
     width: 396px;
     display: block;
     background-color: #023E73;
+    
 }
-
+.item-title {
+    margin-left:5px;
+    margin-right:5px;
+    margin-top:10px;
+}
 .textContainer {
 	width: 100%;
 	padding: 5px;

@@ -97,6 +97,9 @@
     <Content Include="pages\searchResults\searchResults.html" />
     <Content Include="pages\searchResults\searchResults.js" />
     <Content Include="pages\searchResults\searchViewModel.js" />
+    <Content Include="pages\share\share.css" />
+    <Content Include="pages\share\share.html" />
+    <Content Include="pages\share\share.js" />
     <None Include="BulgarianTvGuide_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

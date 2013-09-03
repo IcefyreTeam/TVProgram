@@ -3,14 +3,12 @@
     var tvList = new WinJS.Binding.List([]);
     var showList = new WinJS.Binding.List([]);
 
-    var loadTvList = function (computerDTOs) {
-        //var computerDTOs = Data.tvs;
-
+    var loadTvList = function (tvs) {
         var currentCount = tvList.dataSource.list.length;
         tvList.dataSource.list.splice(0, currentCount);
 
-        for (var i = 0; i < computerDTOs.length; i++) {
-            tvList.push(computerDTOs[i]);
+        for (var i = 0; i < tvs.length; i++) {
+            tvList.push(tvs[i]);
         }
     }
 
@@ -32,24 +30,17 @@
     }
 
 
-    var loadShowList = function (showsDTOs) {
-        //var computerDTOs = Data.tvs;
-
+    var loadShowList = function (shows) {
         var currentCount = showList.dataSource.list.length;
         showList.dataSource.list.splice(0, currentCount);
 
-        for (var i = 0; i < showsDTOs.length; i++) {
-            showList.push(showsDTOs[i]);
+        for (var i = 0; i < shows.length; i++) {
+            showList.push(shows[i]);
         }
     }
-    var addToShowList = function (showsDTOs) {
-        //var computerDTOs = Data.tvs;
-
-        //var currentCount = showList.dataSource.list.length;
-        //showList.dataSource.list.splice(0, currentCount);
-
-        for (var i = 0; i < showsDTOs.length; i++) {
-            showList.push(showsDTOs[i]);
+    var addToShowList = function (shows) {
+        for (var i = 0; i < shows.length; i++) {
+            showList.push(shows[i]);
         }
     }
 
