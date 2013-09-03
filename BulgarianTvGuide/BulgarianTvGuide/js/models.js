@@ -27,12 +27,12 @@
         this.date = Date.parse(date);
     })
 
-    var ProgramUpdateModel = WinJS.Class.define(function (id,  lastUpdateDate) {
+    var ProgramUpdateModel = WinJS.Class.define(function (id, lastUpdateDate) {
         this.id = id;
-        this.lastUpdateDate = Date.parse(lastUpdateDate);
+        this.lastUpdateDate = lastUpdateDate;//Date.parse(lastUpdateDate);
     })
 
-    var ScheduleModel = WinJS.Class.define(function (name, date,listShows) {
+    var ScheduleModel = WinJS.Class.define(function (name, date, listShows) {
         this.name = name;
         this.listShows = listShows;
         this.date = date;
@@ -75,6 +75,6 @@
 
 
     WinJS.Namespace.define("Models", {
-        
+
     })
 })()

@@ -7,6 +7,7 @@
         var currentDateId = Data.getCurrentDayId();
 
         Data.loadOneDay((invokeEvent.detail.itemIndex + 1), currentDateId);
+        Windows.Storage.ApplicationData.current.localSettings.values["tvState"] = invokeEvent.detail.itemIndex + 1;
     }
 
     WinJS.Utilities.markSupportedForProcessing(goToComputerDetailsPage);
