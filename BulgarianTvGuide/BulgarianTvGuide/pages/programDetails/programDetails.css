@@ -6,6 +6,32 @@
 .item-overlay {
 	
 }
+
+#ShowsListView {
+	width:90%;
+	height: 97%;
+}
+
+#itemtemplate {
+    display: block;
+    width: 100px;
+}
+.item-overlay {
+    height: 45px;
+    width: 396px;
+    display: block;
+    background-color: #023E73;
+}
+
+.textContainer {
+	width: 100%;
+	padding: 5px;
+}
+
+.win-item:hover { 
+    outline: #010D26 solid 3px;
+}
+
 @media screen and (-ms-view-state: snapped) {
     .programDetails section[role=main] {
         margin-left: 20px;

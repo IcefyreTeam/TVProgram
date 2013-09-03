@@ -3,6 +3,17 @@
     margin-right: 120px;
 }
 
+#programContainer {
+    display: -ms-grid;
+    -ms-grid-rows: 1fr auto;
+    -ms-grid-columns: 1fr;
+}
+#programContainer > span {
+    -ms-grid-row: 2;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
 @media screen and (-ms-view-state: snapped) {
     .homepage section[role=main] {
         margin-left: 20px;
