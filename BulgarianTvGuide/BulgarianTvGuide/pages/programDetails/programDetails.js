@@ -21,11 +21,12 @@
                 layout: { type: WinJS.UI.GridLayout },
                 scrollPosition: 0
             });
+            this.updateLayout(element, Windows.UI.ViewManagement.ApplicationView.value, null);
         },
 
         unload: function () {
             // TODO: Respond to navigations away from this page.
-            ViewModels.unloadShowList();
+            //ViewModels.unloadShowList();
         },
 
         updateLayout: function (element, viewState, lastViewState) {

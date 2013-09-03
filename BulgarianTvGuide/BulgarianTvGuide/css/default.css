@@ -1,4 +1,7 @@
-﻿#contenthost {
+﻿body {
+    background-color: #010D26;
+}
+#contenthost {
     height: 100%;
     width: 100%;
 }
@@ -74,8 +77,16 @@
 }
 
 #programsListView {
-	width: 99.77%;
-	height: 97.69%;
+	width: 90.98%;
+	height: 100%;
 	left: 0px;
-	top: 15px;
+	top: 0px;
 }
+
+#programContainer {
+	background-color: #023E73;
+}
+
+.win-item:hover { 
+    outline: #0378A6 solid 3px;
+}  

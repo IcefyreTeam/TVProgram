@@ -3,6 +3,9 @@
     margin-right: 120px;
 }
 
+.item-overlay {
+	
+}
 @media screen and (-ms-view-state: snapped) {
     .programDetails section[role=main] {
         margin-left: 20px;

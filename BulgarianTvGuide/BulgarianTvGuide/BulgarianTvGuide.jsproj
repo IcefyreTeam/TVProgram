@@ -58,6 +58,7 @@
     <Content Include="images\smalllogo.png" />
     <Content Include="images\splashscreen.png" />
     <Content Include="images\storelogo.png" />
+    <Content Include="images\stretchlogo.png" />
     <Content Include="js\datalayer.js" />
     <Content Include="js\default.js" />
     <Content Include="js\defaultcodebehind.js" />
@@ -72,6 +73,10 @@
     <Content Include="pages\programDetails\programDetails.css" />
     <Content Include="pages\programDetails\programDetails.html" />
     <Content Include="pages\programDetails\programDetails.js" />
+    <Content Include="pages\searchResults\searchResults.css" />
+    <Content Include="pages\searchResults\searchResults.html" />
+    <Content Include="pages\searchResults\searchResults.js" />
+    <Content Include="pages\searchResults\searchViewModel.js" />
     <None Include="BulgarianTvGuide_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
