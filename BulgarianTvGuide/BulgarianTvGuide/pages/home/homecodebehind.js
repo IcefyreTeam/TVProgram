@@ -4,8 +4,9 @@
         WinJS.Navigation.navigate("/pages/programDetails/programDetails.html", {
             indexInComputersList: invokeEvent.detail.itemIndex
         });
-        var currentDateStr = HomeCodeBehind.getCurrentDateString();
-        Data.initData((invokeEvent.detail.itemIndex + 1), currentDateStr);
+        var currentDateId = Data.getCurrentDayId();
+
+        Data.loadOneDay((invokeEvent.detail.itemIndex + 1), currentDateId);
     }
 
     WinJS.Utilities.markSupportedForProcessing(goToComputerDetailsPage);
@@ -13,24 +14,8 @@
     WinJS.Namespace.define("HomeCodeBehind", {
         callLoadPrograms: function () {
            // ViewModels.loadShowList;
-        },
-        getCurrentDateString: function () {
-            var currentDate = new Date();
-            var year = currentDate.getFullYear().toString();
-            var month = (currentDate.getMonth() + 1).toString();
-            var day = (currentDate.getDay() + 1).toString();
-
-            if (month.length == 1) {
-                month = "0" + month;
-            }
-
-            if (day.length == 1) {
-                day = "0" + day;
-            }
-
-            var dateToString = "" + year + "-" + month + "-" + day + "T00:00:00";
-            return dateToString;
-        },
+        }
+        ,
     //WinJS.Namespace.define("HomeCodeBehind", {
     //    callLoadPrograms: function () {
     //        new WinJS.Promise(function (com) {

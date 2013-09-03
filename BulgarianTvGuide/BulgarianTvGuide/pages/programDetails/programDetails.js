@@ -10,11 +10,14 @@
             // TODO: Initialize the page here.
             WinJS.Binding.processAll(element,
                ViewModels.computers.getAt(options.indexInComputersList));
-            var showList = ViewModels.showList;
+            var showList = ViewModels.groupedShowList;
+
             var container = document.getElementById("ShowsListView");
             var shows = new WinJS.UI.ListView(container, {
-                itemTemplate: document.getElementById("short-computer-template"),
+                itemTemplate: document.getElementById("itemtemplate"),
+                groupHeaderTemplate: document.getElementById("headertemplate"),
                 itemDataSource: showList.dataSource,
+                groupDataSource: showList.groups.dataSource,
                 layout: { type: WinJS.UI.GridLayout },
                 scrollPosition: 0
             });

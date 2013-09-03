@@ -14,19 +14,42 @@
 </head>
 <body>
     <div class="programDetails fragment">
-        <div id="short-computer-template" data-win-control="WinJS.Binding.Template">
-            <div id="showContainer" style="height: 175.11px; width: 222.59px;">
-                <span data-win-bind="innerText: startAt"></span>
-                <span data-win-bind="innerText: name"></span>
-                <span data-win-bind="innerText: dur"></span>
+
+        <div id="headertemplate" data-win-control="WinJS.Binding.Template">
+            <div class="group-header win-type-x-large win-type-interactive" data-win-bind="groupKey: dayId">
+                <span class="group-title win-type-ellipsis" data-win-bind="textContent: dayId"></span>
+                <span class="group-title win-type-ellipsis" data-win-bind="textContent: dayName"></span>
+                <!--<p> asdasdasdas</p>-->
             </div>
         </div>
+        <div id="itemtemplate" data-win-control="WinJS.Binding.Template">
+            <p class="item">
+                <p class="item-overlay">
+                    <span class="item-title" data-win-bind="textContent: dayId"></span>
+                    <span class="item-title" data-win-bind="textContent: name"></span>
+                    <span class="item-title" data-win-bind="textContent: startAt"></span>
+                    <span class="item-title" data-win-bind="textContent: dur"></span>
+                </p>
+            </p>
+        </div>
+
+        <!--<div id="short-computer-template" data-win-control="WinJS.Binding.Template">
+            <div id="showContainer" style="height: 175.11px; width: 222.59px;">
+-->
+
+                <!--<span data-win-bind="innerText: startAt"></span>
+                <span data-win-bind="innerText: name"></span>
+                <span data-win-bind="innerText: dur"></span>-->
+           <!-- </div>
+        </div>-->
+
         <header aria-label="Header content" role="banner">
             <button class="win-backbutton" aria-label="Back" disabled type="button"></button>
             <h1 class="titlearea win-type-ellipsis">
                 <span class="pagetitle" data-win-bind="innerText: programName"></span>
             </h1>
         </header>
+
         <section aria-label="Main content" role="main">
             <div id="ShowsListView">
             </div>
