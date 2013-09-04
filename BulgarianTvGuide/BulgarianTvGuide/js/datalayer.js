@@ -69,11 +69,41 @@
                                shows.show[showIndex].startAt));
                         }
                         if (localSettings.values["" + shows.programId] < days[shows.dataId - 1].date) {
-                            localSettings.values["" + shows.programId] = days[shows.dataId].date;
+                            localSettings.values["" + shows.programId] = days[shows.dataId - 1].date;
                         }
                         for (var i = 0; i < showListPush.length - 1; i++) {                                     //promenq prodyljitelnosta na predavaneto
                             showListPush[i].setDuration(showListPush[i + 1].startAt);
                         }
+
+                        if (localSettings.values["tvState"] == shows.programId) {
+                            var thisDay;
+                            var thisDayId;
+                            var d = getDays();
+                            for (var i = 0; i < d.length; i++) {
+                                if (d[i].id == dataId) {//shows.dataId - 1) { //dataId) {//
+                                    thisDay = d[i].name;
+                                    thisDayId = d[i].id;
+                                    //break;x
+                                }
+                            }
+
+                            var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
+                            showListPush.forEach(function (show) {
+                                tempShows.push(
+                                    {
+                                        dayId: thisDayId,
+                                        dayName: thisDay,
+                                        name: show.name,
+                                        startAt: show.startAt,
+                                        dur: show.dur
+                                    });
+                            })
+
+                            ViewModels.addToShowList(tempShows);
+                        }
+
+
+
                         complete(showListPush);
                     }).then(
                         function (showListPush) {
@@ -304,31 +334,31 @@
                                 showListPush[i].setDuration(showListPush[i + 1].startAt);
                             }
 
-                            if (localSettings.values["tvState"] == tv.id) {
-                                var thisDayId = getCurrentDayId();
-                                var thisDay = getDays()[thisDayId - 1].name;
-                                //for (var i = 0; i < d.length; i++) {
-                                //    if (d[i].id == currentdayId) { //dataId) {//
-                                //        thisDay = d[i].name;
-                                //        thisDayId = d[i].id;
-                                //        //break;x
-                                //    }
-                                //}
+                            //if (localSettings.values["tvState"] == tv.id) {
+                            //    var thisDayId = getCurrentDayId();
+                            //    var thisDay = getDays()[thisDayId - 1].name;
+                            //    //for (var i = 0; i < d.length; i++) {
+                            //    //    if (d[i].id == currentdayId) { //dataId) {//
+                            //    //        thisDay = d[i].name;
+                            //    //        thisDayId = d[i].id;
+                            //    //        //break;x
+                            //    //    }
+                            //    //}
 
-                                var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
-                                showListPush.forEach(function (show) {
-                                    tempShows.push(
-                                        {
-                                            dayId: thisDayId,
-                                            dayName: thisDay,
-                                            name: show.name,
-                                            startAt: show.startAt,
-                                            dur: show.dur
-                                        });
-                                })
+                            //    var tempShows = [];                         /// ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> shows
+                            //    showListPush.forEach(function (show) {
+                            //        tempShows.push(
+                            //            {
+                            //                dayId: thisDayId,
+                            //                dayName: thisDay,
+                            //                name: show.name,
+                            //                startAt: show.startAt,
+                            //                dur: show.dur
+                            //            });
+                            //    })
 
-                                ViewModels.addToShowList(tempShows);
-                            }
+                            //    ViewModels.addToShowList(tempShows);
+                            //}
 
 
                             //addShowsToday(new Models.Schedule(
