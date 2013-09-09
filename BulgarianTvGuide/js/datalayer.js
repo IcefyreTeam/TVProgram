@@ -76,12 +76,13 @@
                 //    });
 
                 new WinJS.Promise(function (downloadedResponseText) {
-                    downloadPost(server + "api/data/PostTvProgramUpdate", new Models.ProgramUpdate(tv, lastUpdatedDay)).then(function (responseText) {
-                        downloadedResponseText(responseText);
-                    }),
-                    function (error) {
-                        //------------------------->ot tuk da se poeme
-                    };
+                    downloadPost(server + "api/data/PostTvProgramUpdate", new Models.ProgramUpdate(tv, lastUpdatedDay))
+                        .then(function (responseText) {
+                            downloadedResponseText(responseText);
+                        }, function (error) {
+                            ViewModels.addToShowList("error");
+                            //==========>
+                        })
                 }).then(function (responseText) {
                     var json = JSON.parse(responseText);
                     var filename = "";
@@ -123,7 +124,7 @@
                                             dayName: dayName,
                                             name: show.name,
                                             startAt: show.startAt,
-                                            dur: show.dur
+                                            dur: show.dur + " минути"
                                         });
                                 })
                                 ViewModels.addToShowList(tempShows);
@@ -271,7 +272,12 @@
                 })
                 //forEach end
                 //completex();
+            },
+            function (responseText) {
+                var asd = responseText;
+                x = 538753;
             }
+
             );
 
         })
@@ -503,7 +509,7 @@
                }
                ,
                function (error) {
-                   console.log(error.tostring());
+                   console.log(error.toString());
                }
            );
     }
@@ -520,10 +526,10 @@
                function (response) {
                    return response.responseText;
                }
-               ,
-               function (error) {
-                   console.log(error.toString()); //------------------> TUK
-               }
+               //,
+               //function (error) {
+               //    return error;//console.log(error.toString()); //------------------> TUK
+               //}
            );
     }
 
@@ -541,7 +547,7 @@
         //        break;
         //    }
         //}
-        return id-1 ;
+        return id - 1;
     }
     var getCurrentDateString = function () {
         var currentDate = new Date();

@@ -39,8 +39,20 @@
         }
     }
     var addToShowList = function (shows) {
-        for (var i = 0; i < shows.length; i++) {
-            showList.push(shows[i]);
+        if (shows == "error") {
+            showList.push(
+                    {
+                        dayId: 999999,
+                        dayName: "Няма достъп до Интернет.",
+                        name: "В момента имате достъп до локално запеметените си програми за тази телевизия.",
+                        startAt: "",
+                        dur: ""
+                    });
+        }
+        else {
+            for (var i = 0; i < shows.length; i++) {
+                showList.push(shows[i]);
+            }
         }
     }
 

@@ -25,7 +25,7 @@
 
         unload: function () {
             // TODO: Respond to navigations away from this page.
-            //ViewModels.unloadShowList();
+            ViewModels.unloadShowList();
         },
 
         updateLayout: function (element, viewState, lastViewState) {
