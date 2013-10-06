@@ -3,8 +3,8 @@
 /// <reference path="//Microsoft.WinJS.1.0/js/ui.js" />
 (function () {
 
-    //var server = "http://localhost:52807/";                     //local
-    var server = "http://bulgariantvprograms.apphb.com/";     //cloud
+    var server = "http://localhost:52807/";                     //local
+    //var server = "http://bulgariantvprograms.apphb.com/";     //cloud
     var tvs = [];
     var days = [];
 
